@@ -7,5 +7,5 @@ data class ContactsData(
     val id: Int,
     val name: String,
     val phoneNumber: String,
-    val email: String
+    val description: String
 )
