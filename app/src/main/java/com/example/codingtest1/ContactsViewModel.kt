@@ -17,26 +17,33 @@ class ContactsViewModel : ViewModel() {
         _contacts.value = getHardcodedContacts()
     }
 
+    fun addContact(contactsData: ContactsData){
+        val updatedList = _contacts.value?.toMutableList() ?: mutableListOf()
+        updatedList.add(contactsData)
+        _contacts.value = updatedList
+
+    }
+
     private fun getHardcodedContacts(): List<ContactsData> {
         return listOf(
-            ContactsData(1, "John Doe", "123-456-7890", "Friend"),
-            ContactsData(2, "Jane Smith", "987-654-3210", "Colleague"),
-            ContactsData(3, "Alice Johnson", "555-123-4567", "Family"),
-            ContactsData(1, "John Doe", "123-456-7890", "Friend"),
-            ContactsData(2, "Jane Smith", "987-654-3210", "Colleague"),
-            ContactsData(3, "Alice Johnson", "555-123-4567", "Family"),
-            ContactsData(1, "John Doe", "123-456-7890", "Friend"),
-            ContactsData(2, "Jane Smith", "987-654-3210", "Colleague"),
-            ContactsData(3, "Alice Johnson", "555-123-4567", "Family"),
-            ContactsData(1, "John Doe", "123-456-7890", "Friend"),
-            ContactsData(2, "Jane Smith", "987-654-3210", "Colleague"),
-            ContactsData(3, "Alice Johnson", "555-123-4567", "Family"),
-            ContactsData(1, "John Doe", "123-456-7890", "Friend"),
-            ContactsData(2, "Jane Smith", "987-654-3210", "Colleague"),
-            ContactsData(3, "Alice Johnson", "555-123-4567", "Family"),
-            ContactsData(1, "John Doe", "123-456-7890", "Friend"),
-            ContactsData(2, "Jane Smith", "987-654-3210", "Colleague"),
-            ContactsData(3, "Alice Johnson", "555-123-4567", "Family")
+            ContactsData("John Doe", "123-456-7890", "Friend"),
+            ContactsData( "Jane Smith", "987-654-3210", "Colleague"),
+            ContactsData( "Alice Johnson", "555-123-4567", "Family"),
+            ContactsData( "John Doe", "123-456-7890", "Friend"),
+            ContactsData( "Jane Smith", "987-654-3210", "Colleague"),
+            ContactsData( "Alice Johnson", "555-123-4567", "Family"),
+            ContactsData( "John Doe", "123-456-7890", "Friend"),
+            ContactsData( "Jane Smith", "987-654-3210", "Colleague"),
+            ContactsData( "Alice Johnson", "555-123-4567", "Family"),
+            ContactsData( "John Doe", "123-456-7890", "Friend"),
+            ContactsData( "Jane Smith", "987-654-3210", "Colleague"),
+            ContactsData( "Alice Johnson", "555-123-4567", "Family"),
+            ContactsData( "John Doe", "123-456-7890", "Friend"),
+            ContactsData( "Jane Smith", "987-654-3210", "Colleague"),
+            ContactsData( "Alice Johnson", "555-123-4567", "Family"),
+            ContactsData( "John Doe", "123-456-7890", "Friend"),
+            ContactsData( "Jane Smith", "987-654-3210", "Colleague"),
+            ContactsData( "Alice Johnson", "555-123-4567", "Family")
         )
 
     }

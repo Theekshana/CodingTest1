@@ -3,6 +3,7 @@
 
     <dimen name="padding">16dp</dimen>
     <dimen name="textSize">16sp</dimen>
+    <dimen name="margin_bottom">44dp</dimen>
 
     /* card view */
     <dimen name="cardCornerRadius">8dp</dimen>

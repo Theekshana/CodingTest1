@@ -3,4 +3,8 @@
     <string name="name">Name</string>
     <string name="number">07777777</string>
     <string name="description">family</string>
+    <string name="add_item_button">Add Item Button</string>
+    <string name="add_the_contact">Add the contact</string>
+    <string name="mobile_no">Mobile No</string>
+    <string name="Description">Description</string>
 </resources>
