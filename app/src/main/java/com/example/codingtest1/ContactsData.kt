@@ -7,5 +7,6 @@ data class ContactsData(
     val id: Int,
     val name: String,
     val phoneNumber: String,
-    val description: String
+    val description: String,
+    var isExpandable: Boolean = false
 )
