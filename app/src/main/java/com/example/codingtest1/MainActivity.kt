@@ -10,7 +10,6 @@ import com.example.codingtest1.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-
     private lateinit var viewModel: ContactsViewModel
     private lateinit var adapter: ContactsAdapter
     private lateinit var binding: ActivityMainBinding
