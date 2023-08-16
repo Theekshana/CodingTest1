@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="padding">8dp</dimen>
+    <dimen name="padding">16dp</dimen>
     <dimen name="textSize">16sp</dimen>
 
     /* card view */

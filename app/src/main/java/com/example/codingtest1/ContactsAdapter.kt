@@ -9,6 +9,8 @@ import com.example.codingtest1.databinding.ItemListBinding
 class ContactsAdapter(var contactList: List<ContactsData>) :
     RecyclerView.Adapter<ContactsAdapter.ContactViewHolder>() {
 
+    private var expandedPosition: Int = RecyclerView.NO_POSITION
+
     inner class ContactViewHolder(val binding: ItemListBinding) :
         RecyclerView.ViewHolder(binding.root)
 
@@ -30,23 +32,28 @@ class ContactsAdapter(var contactList: List<ContactsData>) :
         holder.binding.number.text = contacts.phoneNumber
         holder.binding.description.text = contacts.description
 
-        val isExpandable: Boolean = contacts.isExpandable
-        holder.binding.number.visibility = if (isExpandable) View.VISIBLE else View.GONE
-        holder.binding.description.visibility = if (isExpandable) View.VISIBLE else View.GONE
+        // Check if this item is the currently expanded one
+        val isExpanded = position == expandedPosition
 
+        // Update the visibility of phone number and description based on the expanded state
+        holder.binding.number.visibility = if (isExpanded) View.VISIBLE else View.GONE
+        holder.binding.description.visibility = if (isExpanded) View.VISIBLE else View.GONE
+
+        // Set a click listener on the expanded layout
         holder.binding.expandedLayout.setOnClickListener {
+            val prevExpandedPosition = expandedPosition
+            expandedPosition = if (isExpanded) RecyclerView.NO_POSITION else position
 
-            contacts.isExpandable = !contacts.isExpandable
-            notifyItemChanged(position , Unit)
+            // Update the expandable state for the previously expanded item
+            if (prevExpandedPosition != RecyclerView.NO_POSITION) {
+                contactList[prevExpandedPosition].isExpandable = false
+                notifyItemChanged(prevExpandedPosition)
+
+            }
+
+            // Update the expandable state for the clicked item
+            contacts.isExpandable = !isExpanded
+            notifyItemChanged(position)
         }
-
-
-
-
-
-
-
-
-
     }
 }
