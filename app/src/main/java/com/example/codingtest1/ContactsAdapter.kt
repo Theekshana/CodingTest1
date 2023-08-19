@@ -1,14 +1,19 @@
 package com.example.codingtest1
 
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.codingtest1.databinding.ItemListBinding
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
-class ContactsAdapter(var contactList: List<ContactsData>) :
+class ContactsAdapter(var contactList: ArrayList<ContactsData>,  private val sharedPreferences: SharedPreferences) :
     RecyclerView.Adapter<ContactsAdapter.ContactViewHolder>() {
 
     private var expandedPosition: Int = RecyclerView.NO_POSITION
@@ -16,6 +21,30 @@ class ContactsAdapter(var contactList: List<ContactsData>) :
     inner class ContactViewHolder(val binding: ItemListBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+    }
+    private fun deleteContact(position: Int) {
+        if (position in contactList.indices) {
+            val deletedContact = contactList.removeAt(position)
+            notifyDataSetChanged()
+
+            // Update SharedPreferences to remove the deleted contact
+            updateSharedPreferences(deletedContact)
+        }
+    }
+
+    private fun updateSharedPreferences(deletedContact: ContactsData) {
+        val gson = Gson()
+        val json: String? = sharedPreferences.getString("contacts", null)
+        val savedContacts: ArrayList<ContactsData> =
+            gson.fromJson(json, object : TypeToken<ArrayList<ContactsData>>() {}.type)
+
+        savedContacts.remove(deletedContact)
+
+        val updatedJson: String = gson.toJson(savedContacts)
+
+        val editor = sharedPreferences.edit()
+        editor.putString("contacts", updatedJson)
+        editor.apply()
     }
 
     private fun popUpMenu(view: View, position: Int) {
@@ -30,7 +59,7 @@ class ContactsAdapter(var contactList: List<ContactsData>) :
                 }
 
                 R.id.delete -> {
-                    contactList.toMutableList().removeAt(position)
+                    deleteContact(position)
                     notifyDataSetChanged()
                     Toast.makeText(view.context, "Delete button is clicked", Toast.LENGTH_LONG)
                         .show()

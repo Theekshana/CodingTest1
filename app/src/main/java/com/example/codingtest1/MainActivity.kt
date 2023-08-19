@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: ContactsAdapter
     private lateinit var binding: ActivityMainBinding
     private lateinit var sharedPreferences: SharedPreferences
+    lateinit var contacts: ArrayList<ContactsData>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         // Initialize the ViewModel using ViewModelProvider
         viewModel = ViewModelProvider(this)[ContactsViewModel::class.java]
+        contacts = arrayListOf()
         // Load saved data from SharedPreferences and update ViewModel
         loadSavedDataFromSharedPreferences()
 
@@ -34,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         binding.contactsRecyclerView.layoutManager = LinearLayoutManager(this)
 
         // Initialize the RecyclerView Adapter with the initial contact list
-        adapter = ContactsAdapter(viewModel.contacts.value ?: emptyList())
+        adapter = ContactsAdapter(contacts, sharedPreferences)
 
         binding.contactsRecyclerView.adapter = adapter
 
@@ -48,8 +50,8 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Contact list is empty", Toast.LENGTH_LONG).show()
             } else {
                 // Update the contact list in the adapter
-                adapter.contactList = contactsList
-                
+                adapter.contactList = contactsList as ArrayList<ContactsData>
+
             }
 
         }
@@ -114,7 +116,7 @@ class MainActivity : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE)
         val gson = Gson()
         val json: String? = sharedPreferences.getString("contacts", null)
-        val savedContacts: List<ContactsData> =
+        val savedContacts: ArrayList<ContactsData> =
             gson.fromJson(json, object : TypeToken<List<ContactsData>>() {}.type)
         viewModel.loadContacts(savedContacts)
     }
