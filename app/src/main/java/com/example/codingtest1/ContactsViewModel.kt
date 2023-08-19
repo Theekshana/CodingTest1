@@ -24,6 +24,10 @@ class ContactsViewModel : ViewModel() {
 
     }
 
+    fun loadContacts(loadedContacts: List<ContactsData>) {
+        _contacts.value = loadedContacts
+    }
+
     private fun getHardcodedContacts(): List<ContactsData> {
         return listOf(
             ContactsData("John Doe", "123-456-7890", "Friend"),

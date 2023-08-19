@@ -3,6 +3,8 @@ package com.example.codingtest1
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.codingtest1.databinding.ItemListBinding
 
@@ -12,7 +14,42 @@ class ContactsAdapter(var contactList: List<ContactsData>) :
     private var expandedPosition: Int = RecyclerView.NO_POSITION
 
     inner class ContactViewHolder(val binding: ItemListBinding) :
-        RecyclerView.ViewHolder(binding.root)
+        RecyclerView.ViewHolder(binding.root) {
+
+    }
+
+    private fun popUpMenu(view: View, position: Int) {
+        val popUpMenus = PopupMenu(view.context, view)
+        popUpMenus.inflate(R.menu.show_menu)
+        popUpMenus.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.editText -> {
+                    Toast.makeText(view.context, "Edit text button is clicked", Toast.LENGTH_LONG)
+                        .show()
+                    true
+                }
+
+                R.id.delete -> {
+                    contactList.toMutableList().removeAt(position)
+                    notifyDataSetChanged()
+                    Toast.makeText(view.context, "Delete button is clicked", Toast.LENGTH_LONG)
+                        .show()
+
+                    true
+                }
+
+                else -> true
+
+            }
+
+        }
+        popUpMenus.show()
+        val popupMenu = PopupMenu::class.java.getDeclaredField("mPopup")
+        popupMenu.isAccessible = true
+        val menu = popupMenu.get(popUpMenus)
+        menu.javaClass.getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+            .invoke(menu, true)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
 
@@ -24,7 +61,6 @@ class ContactsAdapter(var contactList: List<ContactsData>) :
 
     override fun getItemCount(): Int = contactList.size
 
-
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
 
         val contacts = contactList[position]
@@ -32,6 +68,9 @@ class ContactsAdapter(var contactList: List<ContactsData>) :
         holder.binding.number.text = contacts.phoneNumber
         holder.binding.description.text = contacts.description
 
+        holder.binding.menus.setOnClickListener {
+            popUpMenu(it,position)
+        }
         // Check if this item is the currently expanded one
         val isExpanded = position == expandedPosition
 
