@@ -28,6 +28,22 @@ class ContactsViewModel : ViewModel() {
         _contacts.value = loadedContacts
     }
 
+    fun deleteContacts(deletedContacts: ArrayList<ContactsData>) {
+        _contacts.value = deletedContacts
+    }
+
+    fun editContact(newContact: ContactsData){
+        val updatedContact = contacts.value.orEmpty().toMutableList()
+        val index = updatedContact.indexOfFirst { it.phoneNumber == newContact.phoneNumber }
+        if (index != -1){
+            updatedContact[index]= newContact
+            _contacts.value = ArrayList(updatedContact)
+        }
+
+
+    }
+
+
     /*private fun getHardcodedContacts(): List<ContactsData> {
         return listOf(
             ContactsData("John Doe", "123-456-7890", "Friend"),

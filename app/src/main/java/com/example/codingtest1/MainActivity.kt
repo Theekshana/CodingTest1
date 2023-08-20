@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         binding.contactsRecyclerView.layoutManager = LinearLayoutManager(this)
 
         // Initialize the RecyclerView Adapter with the initial contact list
-        adapter = ContactsAdapter(contacts, sharedPreferences)
+        adapter = ContactsAdapter(contacts, sharedPreferences, viewModel)
 
         binding.contactsRecyclerView.adapter = adapter
 
@@ -120,5 +120,7 @@ class MainActivity : AppCompatActivity() {
             gson.fromJson(json, object : TypeToken<List<ContactsData>>() {}.type)
         viewModel.loadContacts(savedContacts)
     }
+
+
 
 }
