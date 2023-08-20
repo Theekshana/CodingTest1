@@ -6,15 +6,19 @@ import androidx.lifecycle.ViewModel
 
 class ContactsViewModel : ViewModel() {
 
+
     /**
      * MutableLiveData to hold the list of contacts
      */
     private val _contacts = MutableLiveData<ArrayList<ContactsData>>()
     val contacts: LiveData<ArrayList<ContactsData>> = _contacts
 
-    /*init {
+   /* init {
         // Initialize hardcoded contact data
-        _contacts.value = getHardcodedContacts()
+        val hardcodedContacts = getHardcodedContacts()
+        if (hardcodedContacts != null) {
+            _contacts.value = hardcodedContacts
+        }
     }*/
 
     fun addContact(contactsData: ContactsData){
@@ -44,8 +48,8 @@ class ContactsViewModel : ViewModel() {
     }
 
 
-    /*private fun getHardcodedContacts(): List<ContactsData> {
-        return listOf(
+   fun getHardcodedContacts(): ArrayList<ContactsData>? {
+        return arrayListOf(
             ContactsData("John Doe", "123-456-7890", "Friend"),
             ContactsData( "Jane Smith", "987-654-3210", "Colleague"),
             ContactsData( "Alice Johnson", "555-123-4567", "Family"),
@@ -66,6 +70,6 @@ class ContactsViewModel : ViewModel() {
             ContactsData( "Alice Johnson", "555-123-4567", "Family")
         )
 
-    }*/
+    }
 
 }

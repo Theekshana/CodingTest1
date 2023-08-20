@@ -17,8 +17,8 @@ class ContactsAdapter(
     var contactList: ArrayList<ContactsData>,
     private val sharedPreferences: SharedPreferences,
     private val viewModel: ContactsViewModel,
-) :
-    RecyclerView.Adapter<ContactsAdapter.ContactViewHolder>() {
+
+    ) : RecyclerView.Adapter<ContactsAdapter.ContactViewHolder>() {
 
     private var expandedPosition: Int = RecyclerView.NO_POSITION
 
@@ -35,6 +35,14 @@ class ContactsAdapter(
             // Update SharedPreferences to remove the deleted contact
             updateSharedPreferences(deletedContact)
         }
+    }
+
+    fun setFilteredContacts(contactList: ArrayList<ContactsData>) {
+
+        this.contactList = contactList
+        notifyDataSetChanged()
+
+
     }
 
     private fun updateSharedPreferences(deletedContact: ContactsData) {
@@ -145,6 +153,7 @@ class ContactsAdapter(
         holder.binding.name.text = contacts.name
         holder.binding.number.text = contacts.phoneNumber
         holder.binding.description.text = contacts.description
+
 
         holder.binding.menus.setOnClickListener {
             popUpMenu(it, position)

@@ -7,12 +7,14 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.codingtest1.databinding.ActivityMainBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,7 +22,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: ContactsAdapter
     private lateinit var binding: ActivityMainBinding
     private lateinit var sharedPreferences: SharedPreferences
-    lateinit var contacts: ArrayList<ContactsData>
+    private lateinit var contacts: ArrayList<ContactsData>
+    //private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +31,9 @@ class MainActivity : AppCompatActivity() {
 
         // Initialize the ViewModel using ViewModelProvider
         viewModel = ViewModelProvider(this)[ContactsViewModel::class.java]
+
         contacts = arrayListOf()
+
         // Load saved data from SharedPreferences and update ViewModel
         loadSavedDataFromSharedPreferences()
 
@@ -36,9 +41,24 @@ class MainActivity : AppCompatActivity() {
         binding.contactsRecyclerView.layoutManager = LinearLayoutManager(this)
 
         // Initialize the RecyclerView Adapter with the initial contact list
-        adapter = ContactsAdapter(contacts, sharedPreferences, viewModel)
+        adapter  = ContactsAdapter(contacts, sharedPreferences, viewModel)
 
         binding.contactsRecyclerView.adapter = adapter
+
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // Handle query submission if needed
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filterList(newText)
+                return true
+            }
+
+        })
+
+
 
         binding.btnAddContact.setOnClickListener {
             addContact()
@@ -50,10 +70,31 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Contact list is empty", Toast.LENGTH_LONG).show()
             } else {
                 // Update the contact list in the adapter
-                adapter.contactList = contactsList as ArrayList<ContactsData>
+                adapter.contactList = contactsList
+
 
             }
 
+        }
+
+    }
+
+    private fun filterList(query: String?) {
+        if (query != null){
+            val filteredList = ArrayList<ContactsData>()
+            for (i in viewModel.contacts.value.orEmpty()){
+                if (i.name.lowercase(Locale.ROOT).contains(query)){
+                    filteredList.add(i)
+
+                }
+
+            }
+            if (filteredList.isEmpty()){
+                Toast.makeText(this, "No Data Found", Toast.LENGTH_LONG).show()
+            }else{
+                adapter.setFilteredContacts(filteredList)
+
+            }
         }
 
     }
@@ -120,7 +161,6 @@ class MainActivity : AppCompatActivity() {
             gson.fromJson(json, object : TypeToken<List<ContactsData>>() {}.type)
         viewModel.loadContacts(savedContacts)
     }
-
 
 
 }
