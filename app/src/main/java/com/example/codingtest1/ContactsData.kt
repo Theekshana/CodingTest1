@@ -7,5 +7,5 @@ data class ContactsData(
     var name: String,
     var phoneNumber: String,
     var description: String,
-    var isExpandable: Boolean = false
+    var isExpandable: Boolean = false,
 )

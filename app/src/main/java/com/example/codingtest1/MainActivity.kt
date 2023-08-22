@@ -23,31 +23,51 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var contacts: ArrayList<ContactsData>
-    //private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        // Initialize the ViewModel using ViewModelProvider
-        viewModel = ViewModelProvider(this)[ContactsViewModel::class.java]
+        setupViewModel()
+        setupUI()
+        setupListeners()
+        observeContacts()
 
-        contacts = arrayListOf()
+    }
 
-        // Load saved data from SharedPreferences and update ViewModel
-        loadSavedDataFromSharedPreferences()
+    private fun observeContacts() {
+        // Observe the contacts LiveData for changes
+        viewModel.contacts.observe(this) { contactsList ->
+            if (contactsList.isEmpty()) {
+                Toast.makeText(this, "Contact list is empty", Toast.LENGTH_LONG).show()
+            } else {
+                // Update the contact list in the adapter
+                adapter.contactList = contactsList
 
+            }
+        }
+    }
+
+    private fun setupListeners() {
+        // Handle adding a new contact
+        binding.btnAddContact.setOnClickListener {
+            addContact()
+        }
+    }
+
+    private fun setupUI() {
+        // Configure the RecyclerView
         binding.contactsRecyclerView.setHasFixedSize(true)
         binding.contactsRecyclerView.layoutManager = LinearLayoutManager(this)
 
         // Initialize the RecyclerView Adapter with the initial contact list
-        adapter  = ContactsAdapter(contacts, sharedPreferences, viewModel)
+        adapter = ContactsAdapter(contacts, sharedPreferences, viewModel)
 
         binding.contactsRecyclerView.adapter = adapter
 
+        // Set up the search functionality
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                // Handle query submission if needed
                 return false
             }
 
@@ -57,47 +77,47 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
-
-
-
-        binding.btnAddContact.setOnClickListener {
-            addContact()
-        }
-
-        // Observe the contacts LiveData for changes
-        viewModel.contacts.observe(this) { contactsList ->
-            if (contactsList.isEmpty()) {
-                Toast.makeText(this, "Contact list is empty", Toast.LENGTH_LONG).show()
-            } else {
-                // Update the contact list in the adapter
-                adapter.contactList = contactsList
-
-
-            }
-
-        }
-
     }
 
+    private fun setupViewModel() {
+        // Initialize the ViewModel using ViewModelProvider
+        viewModel = ViewModelProvider(this)[ContactsViewModel::class.java]
+
+        // Initialize the list of contacts
+        contacts = arrayListOf()
+
+
+        // Load saved data from SharedPreferences and update ViewModel
+        loadSavedDataFromSharedPreferences()
+    }
+
+    /**
+     * Filters the contact list based on the given query
+     * @param query The query to filter contacts
+     */
     private fun filterList(query: String?) {
-        if (query != null){
-            val filteredList = ArrayList<ContactsData>()
-            for (i in viewModel.contacts.value.orEmpty()){
-                if (i.name.lowercase(Locale.ROOT).contains(query)){
-                    filteredList.add(i)
+        if (query == null) {
+            adapter.setFilteredContacts(viewModel.contacts.value.orEmpty() as ArrayList<ContactsData>)
+            return
+        }
 
-                }
-
-            }
-            if (filteredList.isEmpty()){
-                Toast.makeText(this, "No Data Found", Toast.LENGTH_LONG).show()
-            }else{
-                adapter.setFilteredContacts(filteredList)
-
+        val filteredList = ArrayList<ContactsData>()
+        for (i in viewModel.contacts.value.orEmpty()) {
+            if (i.name.lowercase(Locale.ROOT).contains(query)) {
+                filteredList.add(i)
             }
         }
 
+        if (filteredList.isEmpty()) {
+            Toast.makeText(this, "No Data Found", Toast.LENGTH_LONG).show()
+            // Clear the filtered list in the adapter to display nothing
+            adapter.setFilteredContacts(ArrayList())
+        } else {
+            // Update the adapter with the filtered list
+            adapter.setFilteredContacts(filteredList)
+        }
     }
+
 
     /**
      * Displays a dialog for adding a new contact with name, number, and description
@@ -161,6 +181,5 @@ class MainActivity : AppCompatActivity() {
             gson.fromJson(json, object : TypeToken<List<ContactsData>>() {}.type)
         viewModel.loadContacts(savedContacts)
     }
-
 
 }

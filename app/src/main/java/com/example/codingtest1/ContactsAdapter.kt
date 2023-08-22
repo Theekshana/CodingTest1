@@ -1,5 +1,6 @@
 package com.example.codingtest1
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.SharedPreferences
 import android.view.LayoutInflater
@@ -20,31 +21,48 @@ class ContactsAdapter(
 
     ) : RecyclerView.Adapter<ContactsAdapter.ContactViewHolder>() {
 
+    // Position of the currently expanded item, initialized to RecyclerView.NO_POSITION
     private var expandedPosition: Int = RecyclerView.NO_POSITION
 
     inner class ContactViewHolder(val binding: ItemListBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+        RecyclerView.ViewHolder(binding.root)
 
-    }
-
+    /**
+     * Deletes the contact at the specified position from the contact list, updates the RecyclerView
+     *
+     * @param position The position of the contact to be deleted.
+     */
+    @SuppressLint("NotifyDataSetChanged")
     private fun deleteContact(position: Int) {
         if (position in contactList.indices) {
             val deletedContact = contactList.removeAt(position)
             notifyDataSetChanged()
+
+            viewModel.deleteContacts(contactList)
 
             // Update SharedPreferences to remove the deleted contact
             updateSharedPreferences(deletedContact)
         }
     }
 
+    /**
+     * Sets the contact list to the provided filtered list and notifies the RecyclerView Adapter
+     *
+     * @param contactList The filtered list of contacts to be displayed
+     */
+    @SuppressLint("NotifyDataSetChanged")
     fun setFilteredContacts(contactList: ArrayList<ContactsData>) {
 
         this.contactList = contactList
         notifyDataSetChanged()
 
-
     }
 
+    /**
+     * Updates the saved contacts in SharedPreferences after a contact has been deleted
+     *
+     * @param deletedContact The contact deleted and removed from SharedPreferences
+     */
     private fun updateSharedPreferences(deletedContact: ContactsData) {
         val gson = Gson()
         val json: String? = sharedPreferences.getString("contacts", null)
@@ -60,6 +78,10 @@ class ContactsAdapter(
         editor.apply()
     }
 
+    /**
+     * Displays a popup menu
+     */
+    @SuppressLint("NotifyDataSetChanged", "DiscouragedPrivateApi")
     private fun popUpMenu(view: View, position: Int) {
         val popUpMenus = PopupMenu(view.context, view)
         popUpMenus.inflate(R.menu.show_menu)
@@ -122,6 +144,7 @@ class ContactsAdapter(
 
         }
         popUpMenus.show()
+        // Show icons in the popup menu
         val popupMenu = PopupMenu::class.java.getDeclaredField("mPopup")
         popupMenu.isAccessible = true
         val menu = popupMenu.get(popUpMenus)
@@ -129,6 +152,7 @@ class ContactsAdapter(
             .invoke(menu, true)
     }
 
+    // Save the contact list to SharedPreferences
     private fun saveContactsToSharedPreferences() {
         val gson = Gson()
         val updatedJson: String = gson.toJson(viewModel.contacts.value)
