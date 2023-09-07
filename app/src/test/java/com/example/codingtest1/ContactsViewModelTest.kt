@@ -46,4 +46,27 @@ internal class ContactsViewModelTest {
         viewModel.contacts.removeObserver(observer)
     }
 
+    @Test
+    fun testLoadContacts() {
+
+        val testContacts = arrayListOf(
+            ContactsData("name", "123456789", "description"),
+            ContactsData("name", "123456789", "description")
+        )
+        
+        viewModel.contacts.observeForever(observer)
+
+        viewModel.loadContacts(testContacts)
+
+        Mockito.verify(observer).onChanged(testContacts)
+
+        val liveDataValue = viewModel.contacts.value
+
+        assert(liveDataValue != null)
+
+        assert(liveDataValue == testContacts)
+
+    }
+
+
 }
