@@ -50,10 +50,10 @@ internal class ContactsViewModelTest {
     fun testLoadContacts() {
 
         val testContacts = arrayListOf(
-            ContactsData("name", "123456789", "description"),
-            ContactsData("name", "123456789", "description")
+            ContactsData("John", "12345", "Friend"),
+            ContactsData("Alice", "67890", "Family")
         )
-        
+
         viewModel.contacts.observeForever(observer)
 
         viewModel.loadContacts(testContacts)
@@ -68,5 +68,29 @@ internal class ContactsViewModelTest {
 
     }
 
+    @Test
+    fun testEditContact() {
+
+        val initialContacts = arrayListOf(
+            ContactsData("John", "12345", "Friend"),
+            ContactsData("Alice", "67890", "Family"),
+            ContactsData("Bob", "54321", "Colleague")
+        )
+
+        viewModel.loadContacts(initialContacts)
+
+        viewModel.contacts.observeForever(observer)
+
+        val newContact = ContactsData("John Doe", "12345", "Best Friend")
+
+        viewModel.editContact(newContact)
+
+        Mockito.verify(observer, Mockito.atLeastOnce()).onChanged(Mockito.any())
+
+        val updatedContacts = viewModel.contacts.value
+
+        assert(updatedContacts != null)
+        assert(updatedContacts!!.contains(newContact))
+    }
 
 }
