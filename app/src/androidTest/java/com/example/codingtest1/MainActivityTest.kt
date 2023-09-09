@@ -31,7 +31,6 @@ internal class MainActivityTest {
         onView(withId(R.id.etName)).perform(typeText("John"), closeSoftKeyboard())
         onView(withId(R.id.etNumber)).perform(typeText("123456789"), closeSoftKeyboard())
         onView(withId(R.id.etDescription)).perform(typeText("Friend"), closeSoftKeyboard())
-
         onView(withId(android.R.id.button1)).perform(click())
 
     }
