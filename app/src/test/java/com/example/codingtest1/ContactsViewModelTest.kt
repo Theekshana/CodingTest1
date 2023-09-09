@@ -88,7 +88,6 @@ internal class ContactsViewModelTest {
         Mockito.verify(observer, Mockito.atLeastOnce()).onChanged(Mockito.any())
 
         val updatedContacts = viewModel.contacts.value
-
         assert(updatedContacts != null)
         assert(updatedContacts!!.contains(newContact))
     }
