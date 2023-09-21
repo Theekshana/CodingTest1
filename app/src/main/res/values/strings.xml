@@ -8,4 +8,6 @@
     <string name="mobile_no">Mobile No</string>
     <string name="Description">Description</string>
     <string name="todo">TODO</string>
+    <string name="adding_contact">Adding contact</string>
+    <string name="fill_all_fields">Please fill in all fields</string>
 </resources>

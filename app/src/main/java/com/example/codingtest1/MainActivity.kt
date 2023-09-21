@@ -142,10 +142,10 @@ class MainActivity : AppCompatActivity() {
                     // Save the updated list to SharedPreferences
                     saveContactsToSharedPreferences()
                     adapter.notifyDataSetChanged()
-                    Toast.makeText(this, "Adding contact", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.adding_contact), Toast.LENGTH_LONG).show()
 
                 } else {
-                    Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.fill_all_fields), Toast.LENGTH_SHORT).show()
 
                 }
 
