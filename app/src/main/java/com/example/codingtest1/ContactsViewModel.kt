@@ -3,6 +3,7 @@ package com.example.codingtest1
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.codingtest1.model.ContactsData
 
 /**
  * ViewModel class to manage contacts data

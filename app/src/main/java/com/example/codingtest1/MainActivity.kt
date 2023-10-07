@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.codingtest1.databinding.ActivityMainBinding
+import com.example.codingtest1.model.ContactsData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.Locale

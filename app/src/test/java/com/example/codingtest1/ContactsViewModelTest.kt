@@ -2,6 +2,7 @@ package com.example.codingtest1
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.example.codingtest1.model.ContactsData
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
