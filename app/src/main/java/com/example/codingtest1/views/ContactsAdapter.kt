@@ -1,8 +1,7 @@
-package com.example.codingtest1
+package com.example.codingtest1.views
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,13 +9,12 @@ import android.widget.EditText
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.codingtest1.R
 import com.example.codingtest1.databinding.ItemListBinding
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.example.codingtest1.model.ContactsData
 
 class ContactsAdapter(
-    var contactList: ArrayList<ContactsData>,
-    private val sharedPreferences: SharedPreferences,
+    var contactList: List<ContactsData>,
     private val viewModel: ContactsViewModel,
 
     ) : RecyclerView.Adapter<ContactsAdapter.ContactViewHolder>() {
@@ -34,14 +32,17 @@ class ContactsAdapter(
      */
     @SuppressLint("NotifyDataSetChanged")
     private fun deleteContact(position: Int) {
+
         if (position in contactList.indices) {
-            val deletedContact = contactList.removeAt(position)
-            notifyDataSetChanged()
 
-            viewModel.deleteContacts(contactList)
+            val currentItem = contactList[position]
+            viewModel.deleteContact(currentItem)
+            val mutableList = contactList.toMutableList()
+            mutableList.removeAt(position)
+            contactList = mutableList
+            notifyItemRemoved(position)
 
-            // Update SharedPreferences to remove the deleted contact
-            updateSharedPreferences(deletedContact)
+
         }
     }
 
@@ -50,32 +51,12 @@ class ContactsAdapter(
      *
      * @param contactList The filtered list of contacts to be displayed
      */
-    @SuppressLint("NotifyDataSetChanged")
+    //@SuppressLint("NotifyDataSetChanged")
     fun setFilteredContacts(contactList: ArrayList<ContactsData>) {
 
         this.contactList = contactList
         notifyDataSetChanged()
 
-    }
-
-    /**
-     * Updates the saved contacts in SharedPreferences after a contact has been deleted
-     *
-     * @param deletedContact The contact deleted and removed from SharedPreferences
-     */
-    private fun updateSharedPreferences(deletedContact: ContactsData) {
-        val gson = Gson()
-        val json: String? = sharedPreferences.getString("contacts", null)
-        val savedContacts: ArrayList<ContactsData> =
-            gson.fromJson(json, object : TypeToken<ArrayList<ContactsData>>() {}.type)
-
-        savedContacts.remove(deletedContact)
-
-        val updatedJson: String = gson.toJson(savedContacts)
-
-        val editor = sharedPreferences.edit()
-        editor.putString("contacts", updatedJson)
-        editor.apply()
     }
 
     /**
@@ -106,11 +87,14 @@ class ContactsAdapter(
                             val newNumber = editNumber.text.toString()
                             val newDescription = editDescription.text.toString()
                             if (newName.isNotEmpty() && newNumber.isNotEmpty() && newDescription.isNotEmpty()) {
-                                val editedContact = ContactsData(newName, newNumber, newDescription)
+                                val editedContact = ContactsData(
+                                    selectedContact.id,
+                                    newName,
+                                    newNumber,
+                                    newDescription
+                                )
                                 viewModel.editContact(editedContact)
-                                contactList[position] = editedContact
                                 notifyDataSetChanged()
-                                saveContactsToSharedPreferences()
                                 Toast.makeText(view.context, "Contact edited", Toast.LENGTH_LONG)
                                     .show()
 
@@ -150,15 +134,6 @@ class ContactsAdapter(
         val menu = popupMenu.get(popUpMenus)
         menu.javaClass.getDeclaredMethod("setForceShowIcon", Boolean::class.java)
             .invoke(menu, true)
-    }
-
-    // Save the contact list to SharedPreferences
-    private fun saveContactsToSharedPreferences() {
-        val gson = Gson()
-        val updatedJson: String = gson.toJson(viewModel.contacts.value)
-        val editor = sharedPreferences.edit()
-        editor.putString("contacts", updatedJson)
-        editor.apply()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
