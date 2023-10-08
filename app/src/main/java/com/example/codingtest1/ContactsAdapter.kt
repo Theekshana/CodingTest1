@@ -16,11 +16,13 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 class ContactsAdapter(
-    var contactList: ArrayList<ContactsData>,
-    private val sharedPreferences: SharedPreferences,
+    var contactList: List<ContactsData>,
     private val viewModel: ContactsViewModel,
 
     ) : RecyclerView.Adapter<ContactsAdapter.ContactViewHolder>() {
+
+    private var list = emptyList<ContactsData>()
+
 
     // Position of the currently expanded item, initialized to RecyclerView.NO_POSITION
     private var expandedPosition: Int = RecyclerView.NO_POSITION
@@ -34,56 +36,36 @@ class ContactsAdapter(
      * @param position The position of the contact to be deleted.
      */
     @SuppressLint("NotifyDataSetChanged")
-    private fun deleteContact(position: Int) {
+    /*private fun deleteContact(position: Int) {
         if (position in contactList.indices) {
             val deletedContact = contactList.removeAt(position)
             notifyDataSetChanged()
 
-            viewModel.deleteContacts(contactList)
+            //viewModel.deleteContacts(contactList)
 
             // Update SharedPreferences to remove the deleted contact
-            updateSharedPreferences(deletedContact)
+            //updateSharedPreferences(deletedContact)
         }
-    }
+    }*/
 
     /**
      * Sets the contact list to the provided filtered list and notifies the RecyclerView Adapter
      *
      * @param contactList The filtered list of contacts to be displayed
      */
-    @SuppressLint("NotifyDataSetChanged")
-    fun setFilteredContacts(contactList: ArrayList<ContactsData>) {
+    //@SuppressLint("NotifyDataSetChanged")
+    /*fun setFilteredContacts(contactList: ArrayList<ContactsData>) {
 
         this.contactList = contactList
         notifyDataSetChanged()
 
-    }
-
-    /**
-     * Updates the saved contacts in SharedPreferences after a contact has been deleted
-     *
-     * @param deletedContact The contact deleted and removed from SharedPreferences
-     */
-    private fun updateSharedPreferences(deletedContact: ContactsData) {
-        val gson = Gson()
-        val json: String? = sharedPreferences.getString("contacts", null)
-        val savedContacts: ArrayList<ContactsData> =
-            gson.fromJson(json, object : TypeToken<ArrayList<ContactsData>>() {}.type)
-
-        savedContacts.remove(deletedContact)
-
-        val updatedJson: String = gson.toJson(savedContacts)
-
-        val editor = sharedPreferences.edit()
-        editor.putString("contacts", updatedJson)
-        editor.apply()
-    }
+    }*/
 
     /**
      * Displays a popup menu
      */
-    @SuppressLint("NotifyDataSetChanged", "DiscouragedPrivateApi")
-    private fun popUpMenu(view: View, position: Int) {
+   // @SuppressLint("NotifyDataSetChanged", "DiscouragedPrivateApi")
+  /*  private fun popUpMenu(view: View, position: Int) {
         val popUpMenus = PopupMenu(view.context, view)
         popUpMenus.inflate(R.menu.show_menu)
         popUpMenus.setOnMenuItemClickListener {
@@ -151,16 +133,8 @@ class ContactsAdapter(
         val menu = popupMenu.get(popUpMenus)
         menu.javaClass.getDeclaredMethod("setForceShowIcon", Boolean::class.java)
             .invoke(menu, true)
-    }
+    }*/
 
-    // Save the contact list to SharedPreferences
-    private fun saveContactsToSharedPreferences() {
-        val gson = Gson()
-        val updatedJson: String = gson.toJson(viewModel.contacts.value)
-        val editor = sharedPreferences.edit()
-        editor.putString("contacts", updatedJson)
-        editor.apply()
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
 
@@ -180,9 +154,9 @@ class ContactsAdapter(
         holder.binding.description.text = contacts.description
 
 
-        holder.binding.menus.setOnClickListener {
+        /*holder.binding.menus.setOnClickListener {
             popUpMenu(it, position)
-        }
+        }*/
         // Check if this item is the currently expanded one
         val isExpanded = position == expandedPosition
 
