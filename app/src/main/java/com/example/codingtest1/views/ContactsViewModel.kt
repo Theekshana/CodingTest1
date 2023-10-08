@@ -1,4 +1,4 @@
-package com.example.codingtest1
+package com.example.codingtest1.views
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -24,6 +24,7 @@ class ContactsViewModel(app: Application) : AndroidViewModel(app) {
         val contactDao = ContactsListDB.getDatabase(app).contactsDao()
         repository = ContactsRepository(contactDao)
         contacts = repository.fetchAllContacts
+
     }
 
     /**

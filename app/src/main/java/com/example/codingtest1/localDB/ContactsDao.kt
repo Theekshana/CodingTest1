@@ -23,8 +23,5 @@ interface ContactsDao {
     @Update
     suspend fun updateContact(contact: ContactsData)
 
-    @Query("SELECT * FROM contacts WHERE name LIKE :query")
-    fun searchContacts(query: String): LiveData<List<ContactsData>>
-
 
 }

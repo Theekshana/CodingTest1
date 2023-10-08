@@ -1,4 +1,4 @@
-package com.example.codingtest1
+package com.example.codingtest1.views
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +10,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.codingtest1.R
 import com.example.codingtest1.databinding.ActivityMainBinding
 import com.example.codingtest1.model.ContactsData
 import java.util.Locale
@@ -77,6 +78,8 @@ class MainActivity : AppCompatActivity() {
              }
 
          })
+
+
     }
 
     private fun setupViewModel() {

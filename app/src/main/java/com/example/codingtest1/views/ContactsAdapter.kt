@@ -1,4 +1,4 @@
-package com.example.codingtest1
+package com.example.codingtest1.views
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.codingtest1.R
 import com.example.codingtest1.databinding.ItemListBinding
 import com.example.codingtest1.model.ContactsData
 
@@ -17,7 +18,6 @@ class ContactsAdapter(
     private val viewModel: ContactsViewModel,
 
     ) : RecyclerView.Adapter<ContactsAdapter.ContactViewHolder>() {
-
 
     // Position of the currently expanded item, initialized to RecyclerView.NO_POSITION
     private var expandedPosition: Int = RecyclerView.NO_POSITION
@@ -135,7 +135,6 @@ class ContactsAdapter(
         menu.javaClass.getDeclaredMethod("setForceShowIcon", Boolean::class.java)
             .invoke(menu, true)
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
 
