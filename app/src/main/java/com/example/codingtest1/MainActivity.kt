@@ -6,11 +6,13 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.codingtest1.databinding.ActivityMainBinding
 import com.example.codingtest1.model.ContactsData
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,7 +25,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-
 
         setupViewModel()
         setupUI()
@@ -65,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         binding.contactsRecyclerView.adapter = adapter
 
         // Set up the search functionality
-        /* binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
              override fun onQueryTextSubmit(query: String?): Boolean {
                  return false
              }
@@ -75,7 +76,7 @@ class MainActivity : AppCompatActivity() {
                  return true
              }
 
-         })*/
+         })
     }
 
     private fun setupViewModel() {
@@ -85,16 +86,13 @@ class MainActivity : AppCompatActivity() {
         // Initialize the list of contacts
         adapter = ContactsAdapter(list, viewModel)
 
-
-        // Load saved data from SharedPreferences and update ViewModel
-        //loadSavedDataFromSharedPreferences()
     }
 
     /**
      * Filters the contact list based on the given query
      * @param query The query to filter contacts
      */
-    /* private fun filterList(query: String?) {
+     private fun filterList(query: String?) {
          if (query == null) {
              adapter.setFilteredContacts(viewModel.contacts.value.orEmpty() as ArrayList<ContactsData>)
              return
@@ -115,8 +113,7 @@ class MainActivity : AppCompatActivity() {
              // Update the adapter with the filtered list
              adapter.setFilteredContacts(filteredList)
          }
-     }*/
-
+     }
 
     /**
      * Displays a dialog for adding a new contact with name, number, and description

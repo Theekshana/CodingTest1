@@ -52,7 +52,6 @@ class ContactsViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-
     /**
      * Edit an existing contact in the list
      */

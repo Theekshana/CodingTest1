@@ -52,12 +52,12 @@ class ContactsAdapter(
      * @param contactList The filtered list of contacts to be displayed
      */
     //@SuppressLint("NotifyDataSetChanged")
-    /*fun setFilteredContacts(contactList: ArrayList<ContactsData>) {
+    fun setFilteredContacts(contactList: ArrayList<ContactsData>) {
 
         this.contactList = contactList
         notifyDataSetChanged()
 
-    }*/
+    }
 
     /**
      * Displays a popup menu
@@ -94,7 +94,6 @@ class ContactsAdapter(
                                     newDescription
                                 )
                                 viewModel.editContact(editedContact)
-                               // contactList[position] = editedContact
                                 notifyDataSetChanged()
                                 Toast.makeText(view.context, "Contact edited", Toast.LENGTH_LONG)
                                     .show()
