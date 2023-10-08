@@ -2,8 +2,6 @@ package com.example.codingtest1
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.SharedPreferences
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +11,6 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.codingtest1.databinding.ItemListBinding
 import com.example.codingtest1.model.ContactsData
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 
 class ContactsAdapter(
     var contactList: List<ContactsData>,
@@ -72,7 +68,7 @@ class ContactsAdapter(
         popUpMenus.inflate(R.menu.show_menu)
         popUpMenus.setOnMenuItemClickListener {
             when (it.itemId) {
-               /* R.id.editText -> {
+                R.id.editText -> {
                     val inflater = LayoutInflater.from(view.context)
                     val editView = inflater.inflate(R.layout.add_contact, null)
                     val editName = editView.findViewById<EditText>(R.id.etName)
@@ -91,11 +87,15 @@ class ContactsAdapter(
                             val newNumber = editNumber.text.toString()
                             val newDescription = editDescription.text.toString()
                             if (newName.isNotEmpty() && newNumber.isNotEmpty() && newDescription.isNotEmpty()) {
-                                val editedContact = ContactsData(newName, newNumber, newDescription)
+                                val editedContact = ContactsData(
+                                    selectedContact.id,
+                                    newName,
+                                    newNumber,
+                                    newDescription
+                                )
                                 viewModel.editContact(editedContact)
-                                contactList[position] = editedContact
+                               // contactList[position] = editedContact
                                 notifyDataSetChanged()
-                                saveContactsToSharedPreferences()
                                 Toast.makeText(view.context, "Contact edited", Toast.LENGTH_LONG)
                                     .show()
 
@@ -114,7 +114,7 @@ class ContactsAdapter(
                         .show()
 
                     true
-                }*/
+                }
 
                 R.id.delete -> {
                     deleteContact(position)

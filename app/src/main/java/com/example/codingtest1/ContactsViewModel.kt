@@ -52,19 +52,15 @@ class ContactsViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+
     /**
      * Edit an existing contact in the list
      */
-    /*fun editContact(newContact: ContactsData) {
-        val updatedContact = contacts.value.orEmpty().toMutableList()
-        val index = updatedContact.indexOfFirst { it.phoneNumber == newContact.phoneNumber }
-        if (index != -1) {
-            updatedContact[index] = newContact
-            _contacts.value = ArrayList(updatedContact)
+    fun editContact(contact: ContactsData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateContact(contact)
         }
-
-
-    }*/
+    }
 
 
 }

@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.example.codingtest1.model.ContactsData
 
 @Dao
@@ -18,6 +19,9 @@ interface ContactsDao {
 
     @Delete
     suspend fun deleteContact(contact: ContactsData)
+
+    @Update
+    suspend fun updateContact(contact: ContactsData)
 
 
 }
