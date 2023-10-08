@@ -31,7 +31,6 @@ class ContactsViewModel(app: Application) : AndroidViewModel(app) {
      */
     fun addContact(contact: ContactsData) {
         viewModelScope.launch(Dispatchers.IO) {
-
             repository.insertContact(contact)
             val currentList = _contacts.value ?: ArrayList()
             val updatedList = ArrayList(currentList)
@@ -39,14 +38,19 @@ class ContactsViewModel(app: Application) : AndroidViewModel(app) {
             _contacts.postValue(updatedList)
         }
     }
-    
 
     /**
      * Delete a list of contacts from the ViewModel
      */
-    /* fun deleteContacts(deletedContacts: ArrayList<ContactsData>) {
-         _contacts.value = deletedContacts
-     }*/
+    fun deleteContact(contact: ContactsData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteContact(contact)
+            val currentList = _contacts.value ?: ArrayList()
+            val updatedList = ArrayList(currentList)
+            updatedList.remove(contact)
+            _contacts.postValue(updatedList)
+        }
+    }
 
     /**
      * Edit an existing contact in the list

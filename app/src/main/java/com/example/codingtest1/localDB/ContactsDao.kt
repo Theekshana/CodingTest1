@@ -2,6 +2,7 @@ package com.example.codingtest1.localDB
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.codingtest1.model.ContactsData
@@ -14,6 +15,9 @@ interface ContactsDao {
 
     @Insert
     suspend fun insertContact(contact: ContactsData)
+
+    @Delete
+    suspend fun deleteContact(contact: ContactsData)
 
 
 }

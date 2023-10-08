@@ -3,6 +3,7 @@ package com.example.codingtest1
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.SharedPreferences
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,8 +22,6 @@ class ContactsAdapter(
 
     ) : RecyclerView.Adapter<ContactsAdapter.ContactViewHolder>() {
 
-    private var list = emptyList<ContactsData>()
-
 
     // Position of the currently expanded item, initialized to RecyclerView.NO_POSITION
     private var expandedPosition: Int = RecyclerView.NO_POSITION
@@ -36,17 +35,20 @@ class ContactsAdapter(
      * @param position The position of the contact to be deleted.
      */
     @SuppressLint("NotifyDataSetChanged")
-    /*private fun deleteContact(position: Int) {
+    private fun deleteContact(position: Int) {
+
         if (position in contactList.indices) {
-            val deletedContact = contactList.removeAt(position)
-            notifyDataSetChanged()
 
-            //viewModel.deleteContacts(contactList)
+            val currentItem = contactList[position]
+            viewModel.deleteContact(currentItem)
+            val mutableList = contactList.toMutableList()
+            mutableList.removeAt(position)
+            contactList = mutableList
+            notifyItemRemoved(position)
 
-            // Update SharedPreferences to remove the deleted contact
-            //updateSharedPreferences(deletedContact)
+
         }
-    }*/
+    }
 
     /**
      * Sets the contact list to the provided filtered list and notifies the RecyclerView Adapter
@@ -64,13 +66,13 @@ class ContactsAdapter(
     /**
      * Displays a popup menu
      */
-   // @SuppressLint("NotifyDataSetChanged", "DiscouragedPrivateApi")
-  /*  private fun popUpMenu(view: View, position: Int) {
+    @SuppressLint("NotifyDataSetChanged", "DiscouragedPrivateApi")
+    private fun popUpMenu(view: View, position: Int) {
         val popUpMenus = PopupMenu(view.context, view)
         popUpMenus.inflate(R.menu.show_menu)
         popUpMenus.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.editText -> {
+               /* R.id.editText -> {
                     val inflater = LayoutInflater.from(view.context)
                     val editView = inflater.inflate(R.layout.add_contact, null)
                     val editName = editView.findViewById<EditText>(R.id.etName)
@@ -112,7 +114,7 @@ class ContactsAdapter(
                         .show()
 
                     true
-                }
+                }*/
 
                 R.id.delete -> {
                     deleteContact(position)
@@ -133,7 +135,7 @@ class ContactsAdapter(
         val menu = popupMenu.get(popUpMenus)
         menu.javaClass.getDeclaredMethod("setForceShowIcon", Boolean::class.java)
             .invoke(menu, true)
-    }*/
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
@@ -154,9 +156,9 @@ class ContactsAdapter(
         holder.binding.description.text = contacts.description
 
 
-        /*holder.binding.menus.setOnClickListener {
+        holder.binding.menus.setOnClickListener {
             popUpMenu(it, position)
-        }*/
+        }
         // Check if this item is the currently expanded one
         val isExpanded = position == expandedPosition
 
